@@ -40,15 +40,14 @@ resource "google_compute_instance" "jenkins_server" {
       systemctl daemon-reexec
       systemctl enable jenkins
       systemctl start jenkins
+
+      #installing terraform
+      sudo apt-get update
+      sudo apt-get install -y unzip wget
+      wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+      unzip terraform_1.6.6_linux_amd64.zip
+      sudo mv terraform /usr/local/bin/
+      terraform -v
+      
     EOT
-}
-
-output "jenkins_server_ip" {
-  value       = google_compute_instance.jenkins_server.network_interface[0].access_config[0].nat_ip
-  description = "The external IP address of the Jenkins server."
-}
-
-output "jenkins_server_port" {
-  value       = "8080"
-  description = "The port on which Jenkins is running."
 }
